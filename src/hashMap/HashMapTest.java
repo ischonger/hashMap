@@ -1,7 +1,9 @@
 package hashMap;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -60,6 +62,18 @@ public class HashMapTest
     }
 
     @Test
+    public void removeAnotherHashMap()
+    {
+        HashMap<Integer, String> intStringMap = new HashMap<Integer, String>();
+        for (int i = 0; i < 10; i++)
+        {
+            intStringMap.put(i, String.valueOf(i));
+        }
+        intStringMap.remove(1);
+        assertNull(intStringMap.get(1));
+    }
+
+    @Test
     public void clearHashMap()
     {
         map.clear();
@@ -97,5 +111,37 @@ public class HashMapTest
     {
         HashMap<String, Integer> map = new HashMap<String, Integer>();
         assertEquals(0, map.size());
+    }
+
+    @Test
+    public void cloneAHashMap()
+    {
+        HashMap<String, Integer> copyMap = map.clone();
+        int actual = copyMap.get("51");
+        assertEquals(51, actual);
+    }
+
+    @Test
+    public void mapHasAKey()
+    {
+        assertTrue(map.containsKey("1"));
+    }
+
+    @Test
+    public void mapHasNotAKey()
+    {
+        assertFalse(map.containsKey("a number"));
+    }
+
+    @Test
+    public void mapHasAValue()
+    {
+        assertTrue(map.containsValue(1));
+    }
+
+    @Test
+    public void mapHasNotAValue()
+    {
+        assertFalse(map.containsValue(10000000));
     }
 }

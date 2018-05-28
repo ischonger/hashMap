@@ -6,7 +6,7 @@ public class HashMap<K, V>
 {
     private int size;
 
-    private int DEFAULT_CAPACITY = 8;
+    private int DEFAULT_CAPACITY = 16;
 
     @SuppressWarnings("unchecked")
     private Entry<K, V>[] values = new Entry[DEFAULT_CAPACITY];
@@ -107,4 +107,36 @@ public class HashMap<K, V>
         size = newSize;
         values = newValues;
     }
+
+    public HashMap<K, V> clone()
+    {
+        return this;
+    }
+
+    public boolean containsKey(Object key)
+    {
+        boolean isContained = false;
+        for (int i = 0; i < size; i++)
+        {
+            if (values[i].getKey() == key.hashCode())
+            {
+                isContained = true;
+            }
+        }
+        return isContained;
+    }
+
+    public boolean containsValue(Object value)
+    {
+        boolean isContained = false;
+        for (int i = 0; i < size; i++)
+        {
+            if (values[i].getValue() == value)
+            {
+                isContained = true;
+            }
+        }
+        return isContained;
+    }
+
 }
