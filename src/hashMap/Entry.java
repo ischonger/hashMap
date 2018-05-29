@@ -1,20 +1,12 @@
 package hashMap;
 
-public class Entry<K, V>
+public class Entry<V>
 {
-    private final K key;
-
     private V value;
 
-    public Entry(K key, V value)
+    public Entry(V value)
     {
-        this.key = key;
         this.value = value;
-    }
-
-    public int getKey()
-    {
-        return key.hashCode();
     }
 
     public V getValue()
