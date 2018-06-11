@@ -3,7 +3,6 @@ package hashMap;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 @SuppressWarnings(
 {
@@ -240,7 +239,7 @@ public class HashMap<Key, V> implements Cloneable, Serializable
     public HashSet<Node> entrySet()
     {
         HashSet<Node> entrySet = new HashSet<Node>();
-        Node traverseNode = null;
+        Node<?, ?> traverseNode = null;
         for (int i = 0; i < arrayMap.length; i++)
         {
             traverseNode = arrayMap[i];
@@ -265,16 +264,41 @@ public class HashMap<Key, V> implements Cloneable, Serializable
         return true;
     }
 
-    public Set keySet()
+    @SuppressWarnings("unchecked")
+    public HashSet<Key> keySet()
     {
-        // TODO keySet()
-        return null;
+        HashSet<Key> keySet = new HashSet<Key>();
+        Node<?, ?> traverseNode = null;
+        for (int i = 0; i < arrayMap.length; i++)
+        {
+            traverseNode = arrayMap[i];
+            while (traverseNode != null) // TODO throws NullPointerException
+            {
+                keySet.add((Key) traverseNode.getKey());
+                traverseNode = traverseNode.getNext();
+            }
+        }
+        return keySet;
     }
 
-    public Collection values()
+    @SuppressWarnings(
     {
-        // TODO values()
-        return null;
+      "unchecked", "null"
+    })
+    public Collection<?> values()
+    {
+        Collection<V> values = null;
+        Node<?, ?> traverseNode = null;
+        for (int i = 0; i < arrayMap.length; i++)
+        {
+            traverseNode = arrayMap[i];
+            while (traverseNode != null)
+            {
+                values.add((V) traverseNode.getValue());
+                traverseNode = traverseNode.getNext();
+            }
+        }
+        return values;
     }
 
 }

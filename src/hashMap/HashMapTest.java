@@ -6,9 +6,11 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Random;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class HashMapTest
@@ -387,6 +389,29 @@ public class HashMapTest
         }
     }
 
+    @SuppressWarnings("rawtypes")
+    @Ignore
+    @Test
+    public void getEntrySetPrinted()
+    {
+        Random rand = new Random();
+        int lengthOfMap1 = 512;
+        HashMap<Integer, Integer> intFloatMap = new HashMap<Integer, Integer>();
+        for (int i = 0; i < lengthOfMap1; i++)
+        {
+            intFloatMap.put(i, rand.nextInt(lengthOfMap1) + 1);
+        }
+
+        HashSet<Node> nodeSet = intFloatMap.entrySet();
+
+        System.out.println("{");
+        for (Node node : nodeSet)
+        {
+            System.out.println(node.toString());
+        }
+        System.out.println("}");
+    }
+
     @Test
     public void isHashmapEmpty()
     {
@@ -412,5 +437,48 @@ public class HashMapTest
     {
         HashMap<Integer, Adress> intAdMap = new HashMap<Integer, Adress>();
         assertTrue(intAdMap.isEmpty());
+    }
+
+    @Test
+    public void getKeySet()
+    {
+        Random rand = new Random();
+        int lengthOfMap = 12;
+        HashMap<Integer, String> intFloatMap = new HashMap<Integer, String>();
+        for (int i = 0; i < lengthOfMap; i++)
+        {
+            intFloatMap.put(i, Integer.toString(i));
+        }
+
+        HashSet<Integer> keySet = intFloatMap.keySet();
+        Integer i = 0;
+        for (Integer key : keySet)
+        {
+            key.equals(i);
+            i++;
+        }
+    }
+
+    @Test
+    @Ignore
+    public void getValuesFromHashMap()
+    {
+        HashMap<Adress, String> adIntMap = new HashMap<Adress, String>();
+
+        Adress adress1 = new Adress("Erfurt", "street1", "number1", "zip1");
+        Adress adress2 = new Adress("Weimar", "street2", "number2", "zip2");
+        Adress adress3 = new Adress("Jenahr", "street3", "number3", "zip3");
+
+        adIntMap.put(adress1, "dangerous");
+        adIntMap.put(adress2, "eligible");
+        adIntMap.put(adress3, "granted");
+
+        String[] cityNames = new String[3];
+        cityNames[0] = "dangerous";
+        cityNames[1] = "eligible";
+        cityNames[2] = "granted";
+        Collection mapValues = adIntMap.values();
+
+        // TODO iterate & check
     }
 }
