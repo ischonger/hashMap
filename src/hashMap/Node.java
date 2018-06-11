@@ -70,4 +70,10 @@ public class Node<Key, V>
         this.key = null;
         this.value = null;
     }
+
+    @Override
+    public String toString()
+    {
+        return this.key.toString() + ": " + this.value.toString();
+    }
 }
