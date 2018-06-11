@@ -2,20 +2,20 @@ package hashMap;
 
 public class Adress
 {
-    private static String city;
+    private String city;
 
-    private static String street;
+    private String street;
 
-    private static String number;
+    private String number;
 
-    private static String zip;
+    private String zip;
 
     Adress(String city, String street, String number, String zip)
     {
-        Adress.city = city;
-        Adress.street = street;
-        Adress.number = number;
-        Adress.zip = zip;
+        this.city = city;
+        this.street = street;
+        this.number = number;
+        this.zip = zip;
     }
 
     public String getCity()
@@ -23,9 +23,9 @@ public class Adress
         return city;
     }
 
-    public static void setCity(String city)
+    public void setCity(String city)
     {
-        Adress.city = city;
+        this.city = city;
     }
 
     public String getStreet()
@@ -33,28 +33,61 @@ public class Adress
         return street;
     }
 
-    public static void setStreet(String street)
+    public void setStreet(String street)
     {
-        Adress.street = street;
+        this.street = street;
     }
 
     public String getNumber()
     {
-        return number;
+        return this.number;
     }
 
-    public static void setNumber(String number)
+    public void setNumber(String number)
     {
-        Adress.number = number;
+        this.number = number;
     }
 
-    public static String getZip()
+    public String getZip()
     {
-        return zip;
+        return this.zip;
     }
 
-    public static void setZip(String zip)
+    public void setZip(String zip)
     {
-        Adress.zip = zip;
+        this.zip = zip;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 13;
+        hash += this.city.hashCode();
+        hash += this.street.hashCode();
+        hash += this.number.hashCode();
+        hash += this.zip.hashCode();
+        return Math.abs(hash);
+
+    }
+
+    @Override
+    public String toString()
+    {
+        return city.toString();
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o == this)
+        {
+            return true;
+        }
+
+        Adress adress = (Adress) o;
+        return this.city.equals(adress.city) &&
+               this.street.equals(adress.street) &&
+               this.number.equals(adress.number) &&
+               this.zip.equals(adress.zip);
     }
 }

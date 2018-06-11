@@ -1,18 +1,17 @@
 package hashMap;
 
+@SuppressWarnings("hiding")
 public class Node<Key, V>
 {
-    private int hash;
-
     private Key key;
 
     private V value;
 
-    private Node next = null;
+    private Node<?, ?> next = null;
 
     public Node(Key key, V value)
     {
-        this.hash = key.hashCode();
+        key.hashCode();
         this.key = key;
         this.value = value;
     }
@@ -27,19 +26,20 @@ public class Node<Key, V>
         return key;
     }
 
-    public void setNext(Node node)
+    public void setNext(Node<?, ?> node)
     {
         this.next = node;
     }
 
-    public Node getNext()
+    public Node<?, ?> getNext()
     {
         return next;
     }
 
+    @SuppressWarnings("unchecked")
     public V checkNext(Key key2)
     {
-        Node node = this.getNext();
+        Node<?, ?> node = this.getNext();
         V toBeReturned = null;
         while (node != null)
         {
@@ -52,15 +52,13 @@ public class Node<Key, V>
         return toBeReturned;
     }
 
-    public Node getNext(Key key2)
+    public Node<?, ?> getNext(Key key2)
     {
-        Node node = this.getNext();
-        Node toBeReturned = null;
+        Node<?, ?> node = this.getNext();
         while (node != null)
         {
             if (node.getKey() == key2)
             {
-                toBeReturned = node;
             }
             node = node.getNext();
         }
@@ -69,7 +67,6 @@ public class Node<Key, V>
 
     public void clear()
     {
-        this.hash = 0;
         this.key = null;
         this.value = null;
     }

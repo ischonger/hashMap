@@ -2,42 +2,30 @@ package hashMap;
 
 import java.io.Serializable;
 
-public class HashMap<Key, V> implements Cloneable, Serializable
+@SuppressWarnings(
 {
-    private int size;
-
+  "serial", "hiding"
+})
+public class HashMap<Key, V> implements Cloneable, Serializable // TODO , Map
+{
     private int DEFAULT_CAPACITY = 16;
 
-    @SuppressWarnings("unchecked")
+    private double LOAD_FACTOR = 0.75;
+
+    @SuppressWarnings("rawtypes")
     private Node[] arrayMap = new Node[DEFAULT_CAPACITY];
 
     public void put(Key key, V value)
     {
-        int index = key.hashCode() % arrayMap.length;
-        Node node = new Node(key, value);
-        if (arrayMap[index] == null)
-        {
-            arrayMap[index] = node;
-        }
-        else
-        {
-            if (arrayMap[index].getNext() == null)
-            {
-                arrayMap[index].setNext(node);
-            }
-            else
-            {
-                Node lastNode = recursiveDescent(arrayMap[index]);
-                lastNode.setNext(node);
-            }
-        }
+        Node<Key, V> node = new Node<Key, V>(key, value);
+        put(node);
     }
 
-    private void put(Node node)
+    @SuppressWarnings("unchecked")
+    private void put(Node<Key, V> node)
     {
         Object key = node.getKey();
-        Object value = node.getValue();
-        int index = key.hashCode() % arrayMap.length;
+        int index = computeIndex(key);
         if (arrayMap[index] == null)
         {
             arrayMap[index] = node;
@@ -50,26 +38,60 @@ public class HashMap<Key, V> implements Cloneable, Serializable
             }
             else
             {
-                Node lastNode = recursiveDescent(arrayMap[index]);
+                Node<?, ?> lastNode = getLastAdjascentNode(arrayMap[index]);
                 lastNode.setNext(node);
             }
         }
+        enlargeArrayMap();
     }
 
-    private Node recursiveDescent(Node node)
+    private int computeIndex(Object object)
     {
-        while (node.getNext() != null)
+        return Math.abs(object.hashCode() % arrayMap.length);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private void enlargeArrayMap()
+    {
+        int numberOfEmptyBuckets = 0;
+        int length = arrayMap.length;
+        for (int i = 0; i < length; i++)
         {
-            node = node.getNext();
+            if (arrayMap[i] == null)
+            {
+                numberOfEmptyBuckets++;
+            }
         }
-        return node;
+
+        if (numberOfEmptyBuckets <= (int) length * (1 - LOAD_FACTOR))
+        {
+            Node[] newArrayMap = new Node[DEFAULT_CAPACITY * 2];
+            for (int i = 0; i < arrayMap.length; i++)
+            {
+                newArrayMap[i] = arrayMap[i];
+            }
+            this.arrayMap = newArrayMap;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private Node<Key, V> getLastAdjascentNode(Node<Key, V> node)
+    {
+        while (true)
+        {
+            if (node.getNext() == null)
+            {
+                return node;
+            }
+            node = (Node<Key, V>) node.getNext();
+        }
     }
 
     @SuppressWarnings("unchecked")
     public V get(Key key)
     {
-        int index = key.hashCode() % arrayMap.length;
-        Node expectedNode = arrayMap[index];
+        int index = computeIndex(key);
+        Node<Key, ?> expectedNode = arrayMap[index];
         V toBeReturned = null;
         if (expectedNode != null)
         {
@@ -86,11 +108,12 @@ public class HashMap<Key, V> implements Cloneable, Serializable
         return toBeReturned;
     }
 
+    @SuppressWarnings("unchecked")
     public boolean remove(Key key)
     {
         boolean isRemoved = false;
-        int removalIndex = key.hashCode() % arrayMap.length;
-        Node expectedNode = arrayMap[removalIndex];
+        int removalIndex = computeIndex(key);
+        Node<Key, V> expectedNode = arrayMap[removalIndex];
         if (expectedNode != null)
         {
             if (expectedNode.getKey() == key)
@@ -100,11 +123,11 @@ public class HashMap<Key, V> implements Cloneable, Serializable
             }
             else
             {
-                Node oldNode = expectedNode;
+                Node<Key, V> oldNode = expectedNode;
                 while (expectedNode.getKey() != key)
                 {
                     oldNode = expectedNode;
-                    expectedNode = expectedNode.getNext();
+                    expectedNode = (Node<Key, V>) expectedNode.getNext();
                 }
                 oldNode.setNext(expectedNode.getNext());
             }
@@ -133,74 +156,83 @@ public class HashMap<Key, V> implements Cloneable, Serializable
     /*
      * returns the amount of nodes saved in the array
      */
+    @SuppressWarnings("unchecked")
     public int size()
     {
         int size = 0;
         for (int i = 0; i < arrayMap.length; i++)
         {
-            Node expectedNode = arrayMap[i];
+            Node<Key, V> expectedNode = arrayMap[i];
             while (expectedNode != null)
             {
                 size += 1;
-                expectedNode = expectedNode.getNext();
+                expectedNode = (Node<Key, V>) expectedNode.getNext();
             }
         }
         return size;
     }
 
-    public void putAll(HashMap<Key, V> map2)
+    @SuppressWarnings("unchecked")
+    public void putAll(HashMap<Key, V> map2) // TODO redo putAll... whilst putting without deleting oldNodes
     {
         for (int i = 0; i < map2.capacity(); i++)
         {
+            Node<Key, V> node = map2.arrayMap[i];
             if (map2.arrayMap[i] != null)
             {
-                Node node = map2.arrayMap[i];
                 this.put(node);
+                /*
+                 * while (node.getNext() != null) { this.put(node); node = node.getNext(); }
+                 */
             }
+
         }
-        // TODO check for doubled entries?
+
     }
 
+    @SuppressWarnings("unchecked")
     public HashMap<Key, V> clone()
     {
         HashMap<Key, V> map2 = new HashMap<Key, V>();
         for (int i = 0; i < map2.capacity(); i++)
         {
-            Node node = arrayMap[i];
+            Node<Key, V> node = arrayMap[i];
             map2.put(node);
         }
         return map2;
     }
 
+    @SuppressWarnings("unchecked")
     public boolean containsKey(Key key)
     {
         for (int i = 0; i < arrayMap.length; i++)
         {
-            Node expectedNode = arrayMap[i];
+            Node<Key, V> expectedNode = arrayMap[i];
             while (expectedNode != null)
             {
                 if (expectedNode.getKey() == key)
                 {
                     return true;
                 }
-                expectedNode = expectedNode.getNext();
+                expectedNode = (Node<Key, V>) expectedNode.getNext();
             }
         }
         return false;
     }
 
+    @SuppressWarnings("unchecked")
     public boolean containsValue(V value)
     {
         for (int i = 0; i < arrayMap.length; i++)
         {
-            Node expectedNode = arrayMap[i];
+            Node<Key, V> expectedNode = arrayMap[i];
             while (expectedNode != null)
             {
                 if (expectedNode.getValue().equals(value))
                 {
                     return true;
                 }
-                expectedNode = expectedNode.getNext();
+                expectedNode = (Node<Key, V>) expectedNode.getNext();
             }
         }
         return false;

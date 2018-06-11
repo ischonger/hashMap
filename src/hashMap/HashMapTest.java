@@ -6,22 +6,19 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
+import java.util.Random;
+
 import org.junit.Test;
 
 public class HashMapTest
 {
-    @Before
-    public void setUp() throws Exception
-    {
-    }
-
     @Test
-    public void putMapWithSameHash()
+    public void putMapWithSameHash1()
     {
+        @SuppressWarnings("rawtypes")
         HashMap<Key, String> hashmap = new HashMap<Key, String>();
-        Key firstNameKey = new Key("FB");
-        Key lastNameKey = firstNameKey;
+        Key<String> firstNameKey = new Key<String>("FB");
+        Key<String> lastNameKey = firstNameKey;
         hashmap.put(firstNameKey, "John");
         hashmap.put(lastNameKey, "Doe");
 
@@ -29,15 +26,48 @@ public class HashMapTest
         assertNotEquals("Doe", hashmap.get(lastNameKey));
     }
 
+    @Test
+    public void putMapWithSameHash2()
+    {
+        @SuppressWarnings("rawtypes")
+        HashMap<Key, String> hashmap = new HashMap<Key, String>();
+        Key<String> firstNameKey = new Key<String>("FB");
+        hashmap.put(firstNameKey, "John");
+        hashmap.put(firstNameKey, "Doe");
+
+        assertEquals("John", hashmap.get(firstNameKey));
+        assertNotEquals("Doe", hashmap.get(firstNameKey));
+    }
+
+    @Test
+    public void putMapWithSameHashString1()
+    {
+        HashMap<String, String> hashmap = new HashMap<String, String>();
+        hashmap.put("AaAa", "john");
+        hashmap.put("BBBB", "doe");
+
+        assertEquals("john", hashmap.get("AaAa"));
+        assertEquals("doe", hashmap.get("BBBB"));
+    }
+
+    @Test
+    public void putMapWithSameHashString2()
+    {
+        HashMap<String, String> hashmap = new HashMap<String, String>();
+        hashmap.put("AaAa", "john");
+        hashmap.put("BBBB", "doe");
+
+        assertEquals("doe", hashmap.get("BBBB"));
+        assertEquals("john", hashmap.get("AaAa"));
+    }
+
     @SuppressWarnings("rawtypes")
     @Test
     public void putHashMap()
     {
         HashMap<Key, String> hashmap = new HashMap<Key, String>();
-        @SuppressWarnings("unchecked")
-        Key firstNameKey = new Key("first name");
-        @SuppressWarnings("unchecked")
-        Key lastNameKey = new Key("last name");
+        Key<String> firstNameKey = new Key<String>("first name");
+        Key<String> lastNameKey = new Key<String>("last name");
         hashmap.put(firstNameKey, "John");
         hashmap.put(lastNameKey, "Doe");
 
@@ -45,26 +75,13 @@ public class HashMapTest
         assertEquals("Doe", hashmap.get(lastNameKey));
     }
 
-    @SuppressWarnings("rawtypes")
-    @Test
-    public void put2HashMap()
-    {
-        HashMap<Key, Integer> hashMap = new HashMap<Key, Integer>();
-        @SuppressWarnings("unchecked")
-        Key zipKey = new Key("dojaqojnweofjdweofnöriweonfösökodnöfraeovnrenvirevrnvüorneövoneraövnaöregvnöaerjvn");
-        hashMap.put(zipKey, 985876434);
-        int value = hashMap.get(zipKey);
-        assertEquals(Integer.valueOf(985876434), hashMap.get(zipKey));
-    }
-
     @Test
     public void put3HashMap()
     {
         HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
-        hashMap.put("dojaqojnweofjdweofnöriweonfösökodnöfraeovnrenvirevrnvüorneövoneraövnaöregvnöaerjvn", 985876434);
-        Object value = hashMap.get("dojaqojnweofjdweofnöriweonfösökodnöfraeovnrenvirevrnvüorneövoneraövnaöregvnöaerjvn");
+        hashMap.put("dojaqojnweofjdweofnöriweonfösökodnöfraeo vnrenvirevrnvüorneövoneraövnaöregvnöaerjvn", 985876434);
         assertEquals(Integer.valueOf(985876434),
-                     hashMap.get("dojaqojnweofjdweofnöriweonfösökodnöfraeovnrenvirevrnvüorneövoneraövnaöregvnöaerjvn"));
+                     hashMap.get("dojaqojnweofjdweofnöriweonfösökodnöfraeo vnrenvirevrnvüorneövoneraövnaöregvnöaerjvn"));
     }
 
     @Test
@@ -72,7 +89,7 @@ public class HashMapTest
     {
         HashMap<Integer, Boolean> boolMap = new HashMap<Integer, Boolean>();
         boolMap.put(3, true);
-        Boolean actual = (Boolean) boolMap.get(3);
+        Boolean actual = boolMap.get(3);
         assertEquals(actual, true);
     }
 
@@ -153,30 +170,31 @@ public class HashMapTest
     }
 
     @Test
-    public void addAHashMap()
+    public void putAHashMap()
     {
         HashMap<Integer, Float> intFloatMap1 = new HashMap<Integer, Float>();
-        for (int i = 0; i < 64; i++)
+        for (int i = 0; i < 32; i++)
         {
             intFloatMap1.put(i, (float) i);
         }
+
         HashMap<Integer, Float> intFloatMap2 = new HashMap<Integer, Float>();
-        for (int i = 64; i < 128; i++)
+        for (int i = 32; i < 64; i++)
         {
             intFloatMap2.put(i, (float) i);
         }
 
         intFloatMap1.putAll(intFloatMap2);
-        assertEquals(128, intFloatMap1.size());
+        assertEquals(64, intFloatMap1.size());
 
-        for (int i = 65; i < intFloatMap1.size(); i++)
+        for (int i = 32; i < intFloatMap1.size(); i++)
         {
             assertEquals(intFloatMap1.get(i), intFloatMap2.get(i));
         }
     }
 
     @Test
-    public void addAHashMapSmallTest()
+    public void putAllSmallTest()
     {
         HashMap<Integer, Float> intFloatMap1 = new HashMap<Integer, Float>();
         for (int i = 0; i < 8; i++)
@@ -194,6 +212,59 @@ public class HashMapTest
         assertEquals(16, intFloatMap1.size());
 
         for (int i = 8; i < intFloatMap1.size() + 10; i++)
+        {
+            assertEquals(intFloatMap1.get(i), intFloatMap2.get(i));
+        }
+    }
+
+    @Test
+    public void putAllHugeTest()
+    {
+        int lengthOfMap1 = 512;
+        int lengthOfMap2 = 1024;
+        HashMap<Integer, Float> intFloatMap1 = new HashMap<Integer, Float>();
+        for (int i = 0; i < lengthOfMap1; i++)
+        {
+            intFloatMap1.put(i, (float) i);
+        }
+
+        HashMap<Integer, Float> intFloatMap2 = new HashMap<Integer, Float>();
+        for (int i = lengthOfMap1; i < lengthOfMap2; i++)
+        {
+            intFloatMap2.put(i, (float) i);
+        }
+
+        intFloatMap1.putAll(intFloatMap2);
+        assertEquals(lengthOfMap2, intFloatMap1.size());
+
+        for (int i = lengthOfMap1; i < lengthOfMap2; i++)
+        {
+            assertEquals(intFloatMap1.get(i), intFloatMap2.get(i));
+        }
+    }
+
+    @Test
+    public void putAllRandomValues()
+    {
+        Random rand = new Random();
+        int lengthOfMap1 = 512;
+        int lengthOfMap2 = 1024;
+        HashMap<Integer, Float> intFloatMap1 = new HashMap<Integer, Float>();
+        for (int i = 0; i < lengthOfMap1; i++)
+        {
+            intFloatMap1.put(i, rand.nextFloat() + 1);
+        }
+
+        HashMap<Integer, Float> intFloatMap2 = new HashMap<Integer, Float>();
+        for (int i = lengthOfMap1; i < lengthOfMap2; i++)
+        {
+            intFloatMap2.put(i, rand.nextFloat() + 1);
+        }
+
+        intFloatMap1.putAll(intFloatMap2);
+        assertEquals(lengthOfMap2, intFloatMap1.size());
+
+        for (int i = lengthOfMap1; i < lengthOfMap2; i++)
         {
             assertEquals(intFloatMap1.get(i), intFloatMap2.get(i));
         }
@@ -228,15 +299,14 @@ public class HashMapTest
     @Test
     public void mapHasAKey()
     {
+        @SuppressWarnings("rawtypes")
         HashMap<Key, String> hashmap = new HashMap<Key, String>();
-        @SuppressWarnings("unchecked")
-        Key firstNameKey = new Key("first name");
-        @SuppressWarnings("unchecked")
-        Key lastNameKey = new Key("last name");
+        Key<String> firstNameKey = new Key<String>("first name");
+        Key<String> lastNameKey = new Key<String>("last name");
         hashmap.put(firstNameKey, "John");
         hashmap.put(lastNameKey, "Doe");
 
-        assertFalse(hashmap.containsKey(new Key("a number")));
+        assertFalse(hashmap.containsKey(new Key<String>("a number")));
         assertTrue(hashmap.containsKey(lastNameKey));
     }
 
@@ -255,7 +325,6 @@ public class HashMapTest
         assertFalse(intFloatMap.containsValue((float) 10000000.9));
     }
 
-    // TODO use HashMap with a self-built object (eg adress)
     @Test
     public void adressMap()
     {
@@ -269,17 +338,26 @@ public class HashMapTest
         intAdMap.put(2, adress2);
         intAdMap.put(3, adress3);
 
-        Adress receivedAdress1 = intAdMap.get(1);
-        Adress receivedAdress2 = intAdMap.get(2);
-        Adress receivedAdress3 = intAdMap.get(3);
-
-        String city1 = receivedAdress1.getCity();
-        String city2 = receivedAdress2.getCity();
-        String city3 = receivedAdress3.getCity();
-
-        assertEquals("Erfurt", city1);
-        assertEquals("Weimar", city2);
-        assertEquals("Jenahr", city3);
+        assertEquals("Erfurt", intAdMap.get(1).getCity());
+        assertEquals("Weimar", intAdMap.get(2).getCity());
+        assertEquals("Jenahr", intAdMap.get(3).getCity());
     }
-    // TODO fix HashMap<String, Int>
+
+    @Test
+    public void adressAsKey()
+    {
+        HashMap<Adress, String> adIntMap = new HashMap<Adress, String>();
+
+        Adress adress1 = new Adress("Erfurt", "street1", "number1", "zip1");
+        Adress adress2 = new Adress("Weimar", "street2", "number2", "zip2");
+        Adress adress3 = new Adress("Jenahr", "street3", "number3", "zip3");
+
+        adIntMap.put(adress1, "dangerous");
+        adIntMap.put(adress2, "eligible");
+        adIntMap.put(adress3, "granted");
+
+        assertEquals("dangerous", adIntMap.get(adress1));
+        assertEquals("eligible", adIntMap.get(adress2));
+        assertEquals("granted", adIntMap.get(adress3));
+    }
 }
