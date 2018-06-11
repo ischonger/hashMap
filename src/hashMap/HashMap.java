@@ -1,12 +1,15 @@
 package hashMap;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @SuppressWarnings(
 {
   "serial", "hiding"
 })
-public class HashMap<Key, V> implements Cloneable, Serializable // TODO , Map
+public class HashMap<Key, V> implements Cloneable, Serializable
 {
     private int DEFAULT_CAPACITY = 16;
 
@@ -173,7 +176,7 @@ public class HashMap<Key, V> implements Cloneable, Serializable // TODO , Map
     }
 
     @SuppressWarnings("unchecked")
-    public void putAll(HashMap<Key, V> map2) // TODO redo putAll... whilst putting without deleting oldNodes
+    public void putAll(HashMap<Key, V> map2)
     {
         for (int i = 0; i < map2.capacity(); i++)
         {
@@ -181,13 +184,8 @@ public class HashMap<Key, V> implements Cloneable, Serializable // TODO , Map
             if (map2.arrayMap[i] != null)
             {
                 this.put(node);
-                /*
-                 * while (node.getNext() != null) { this.put(node); node = node.getNext(); }
-                 */
             }
-
         }
-
     }
 
     @SuppressWarnings("unchecked")
@@ -236,6 +234,41 @@ public class HashMap<Key, V> implements Cloneable, Serializable // TODO , Map
             }
         }
         return false;
+    }
+
+    @SuppressWarnings("rawtypes")
+    public HashSet<Node> entrySet()
+    {
+        HashSet<Node> entrySet = new HashSet<Node>();
+        Node traverseNode = null;
+        for (int i = 0; i < arrayMap.length; i++)
+        {
+            traverseNode = arrayMap[i];
+            while (traverseNode.getNext() != null)
+            {
+                entrySet.add(traverseNode);
+                traverseNode = traverseNode.getNext();
+            }
+        }
+        return entrySet;
+    }
+
+    public boolean isEmpty()
+    {
+        // TODO isEmpty()
+        return false;
+    }
+
+    public Set keySet()
+    {
+        // TODO keySet()
+        return null;
+    }
+
+    public Collection values()
+    {
+        // TODO values()
+        return null;
     }
 
 }

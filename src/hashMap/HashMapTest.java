@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashSet;
 import java.util.Random;
 
 import org.junit.Test;
@@ -359,5 +360,24 @@ public class HashMapTest
         assertEquals("dangerous", adIntMap.get(adress1));
         assertEquals("eligible", adIntMap.get(adress2));
         assertEquals("granted", adIntMap.get(adress3));
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Test
+    public void getEntrySet()
+    {
+        Random rand = new Random();
+        int lengthOfMap1 = 512;
+        HashMap<Integer, Integer> intFloatMap = new HashMap<Integer, Integer>();
+        for (int i = 0; i < lengthOfMap1; i++)
+        {
+            intFloatMap.put(i, rand.nextInt(lengthOfMap1) + 1);
+        }
+
+        HashSet<Node> nodeSet = intFloatMap.entrySet();
+        for (Node node : nodeSet)
+        {
+            assertEquals(node.getValue(), intFloatMap.get((Integer) node.getKey()));
+        }
     }
 }
