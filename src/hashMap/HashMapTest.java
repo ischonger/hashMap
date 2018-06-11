@@ -108,7 +108,13 @@ public class HashMapTest
 
         intMap.remove(2);
         assertNull(intMap.get(2));
+    }
 
+    @Test
+    public void removeFromEmptyHashmap()
+    {
+        HashMap<Integer, String> intMap = new HashMap<Integer, String>();
+        assertFalse(intMap.remove(7));
     }
 
     @Test
@@ -379,5 +385,32 @@ public class HashMapTest
         {
             assertEquals(node.getValue(), intFloatMap.get((Integer) node.getKey()));
         }
+    }
+
+    @Test
+    public void isHashmapEmpty()
+    {
+        HashMap<Integer, Adress> intAdMap = new HashMap<Integer, Adress>();
+        Random rand = new Random();
+
+        for (int i = 1; i <= 100; i++)
+        {
+            intAdMap.put(i,
+                         new Adress(Integer.toString(rand.nextInt(100)), Integer.toString(rand.nextInt(100)), Integer.toString(rand.nextInt(100)), Integer.toString(rand.nextInt(100))));
+        }
+
+        for (int i = 1; i <= 100; i++)
+        {
+            intAdMap.remove(i);
+        }
+
+        assertTrue(intAdMap.isEmpty());
+    }
+
+    @Test
+    public void isNewHashmapEmpty()
+    {
+        HashMap<Integer, Adress> intAdMap = new HashMap<Integer, Adress>();
+        assertTrue(intAdMap.isEmpty());
     }
 }

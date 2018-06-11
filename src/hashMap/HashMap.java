@@ -255,8 +255,14 @@ public class HashMap<Key, V> implements Cloneable, Serializable
 
     public boolean isEmpty()
     {
-        // TODO isEmpty()
-        return false;
+        for (int i = 0; i < arrayMap.length; i++)
+        {
+            if (arrayMap[i] != null)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     public Set keySet()
