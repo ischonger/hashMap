@@ -303,7 +303,6 @@ public class HashMapTest
         assertFalse(intFloatMap.containsValue((float) 10000000.9));
     }
 
-    // TODO refactor all adress test functions
     @Test
     public void adressMap()
     {
