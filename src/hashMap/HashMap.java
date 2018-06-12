@@ -16,8 +16,21 @@ public class HashMap<Key, V> implements Cloneable, Serializable
 
     private double LOAD_FACTOR = 0.75;
 
+    private boolean DO_EXPANSION = false;
+
     @SuppressWarnings("rawtypes")
     private Node[] arrayMap = new Node[DEFAULT_CAPACITY];
+
+    HashMap()
+    {
+    }
+
+    HashMap(int defaultCapacity, double loadFactor, boolean doExpansion)
+    {
+        this.DEFAULT_CAPACITY = defaultCapacity;
+        this.LOAD_FACTOR = loadFactor;
+        this.DO_EXPANSION = doExpansion;
+    }
 
     public void put(Key key, V value)
     {
@@ -46,7 +59,10 @@ public class HashMap<Key, V> implements Cloneable, Serializable
                 lastNode.setNext(node);
             }
         }
-        enlargeArrayMap();
+        if (DO_EXPANSION)
+        {
+            enlargeArrayMap();
+        }
     }
 
     private int computeIndex(Object object)
@@ -267,7 +283,7 @@ public class HashMap<Key, V> implements Cloneable, Serializable
         for (int i = 0; i < arrayMap.length; i++)
         {
             traverseNode = arrayMap[i];
-            while (traverseNode != null) // TODO throws NullPointerException
+            while (traverseNode != null)
             {
                 keySet.add((Key) traverseNode.getKey());
                 traverseNode = traverseNode.getNext();
