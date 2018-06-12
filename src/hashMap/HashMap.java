@@ -33,13 +33,28 @@ public class HashMap<Key, V> implements Cloneable, Serializable
      */
     HashMap(int defaultCapacity, double loadFactor, boolean doExpansion)
     {
-        if ((loadFactor > 1.0 && loadFactor < 0.0) || defaultCapacity < 0)
+        if ((loadFactor >= 1.0 && loadFactor <= 0.0) || defaultCapacity <= 0)
         {
             throw new IllegalArgumentException();
         }
         this.DEFAULT_CAPACITY = defaultCapacity;
         this.LOAD_FACTOR = loadFactor;
         this.DO_EXPANSION = doExpansion;
+    }
+
+    /*
+     * Constructs an empty HashMap with the specified initial capacity and load factor.
+     * 
+     * throws IllegalArgumentException - if the initial capacity is negative or the load factor is not in [0, 1]
+     */
+    HashMap(int defaultCapacity, double loadFactor)
+    {
+        if ((loadFactor >= 1.0 && loadFactor <= 0.0) || defaultCapacity <= 0)
+        {
+            throw new IllegalArgumentException();
+        }
+        this.DEFAULT_CAPACITY = defaultCapacity;
+        this.LOAD_FACTOR = loadFactor;
     }
 
     HashMap(boolean doExpansion)

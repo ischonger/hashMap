@@ -498,5 +498,26 @@ public class HashMapTest
         assertTrue(elapsedTime > elapsedTime2);
     }
 
-    // TODO exception test cases
+    @Test(expected = IllegalArgumentException.class)
+    public void illegalArgumentsInConstructor()
+    {
+        @SuppressWarnings("unused")
+        HashMap<Double, Double> doubleMap = new HashMap<Double, Double>(-5, 0, true);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void nullPointerExceptionInPutAll()
+    {
+        Random rand = new Random();
+        int lengthOfMap1 = 512;
+        HashMap<Integer, Float> intFloatMap1 = new HashMap<Integer, Float>();
+        for (int i = 0; i < lengthOfMap1; i++)
+        {
+            intFloatMap1.put(i, rand.nextFloat() + 1);
+        }
+
+        HashMap<Integer, Float> intFloatMap2 = new HashMap<Integer, Float>();
+
+        intFloatMap1.putAll(intFloatMap2);
+    }
 }
