@@ -196,7 +196,7 @@ public class HashMapTest
         putAllTest(512, 1024);
     }
 
-    public void putAllTest(int lengthOfMap1, int lengthOfMap2)
+    private HashMap<Integer, Float> putAllTest(int lengthOfMap1, int lengthOfMap2)
     {
         HashMap<Integer, Float> intFloatMap1 = new HashMap<Integer, Float>();
         for (int i = 0; i < lengthOfMap1; i++)
@@ -217,6 +217,32 @@ public class HashMapTest
         {
             assertEquals(intFloatMap1.get(i), intFloatMap2.get(i));
         }
+
+        return intFloatMap1;
+    }
+
+    private HashMap<Integer, Float> putAllTest(int lengthOfMap1, int lengthOfMap2, HashMap<Integer, Float> map)
+    {
+        for (int i = 0; i < lengthOfMap1; i++)
+        {
+            map.put(i, (float) i);
+        }
+
+        HashMap<Integer, Float> intFloatMap2 = new HashMap<Integer, Float>();
+        for (int i = lengthOfMap1; i < lengthOfMap2; i++)
+        {
+            intFloatMap2.put(i, (float) i);
+        }
+
+        map.putAll(intFloatMap2);
+        assertEquals(lengthOfMap2, map.size());
+
+        for (int i = lengthOfMap1; i < lengthOfMap2; i++)
+        {
+            assertEquals(map.get(i), intFloatMap2.get(i));
+        }
+
+        return map;
     }
 
     @Test
@@ -450,5 +476,48 @@ public class HashMapTest
         {
             assertTrue(adStringMap.containsValue((String) value));
         }
+    }
+
+    @Test
+    public void putAllRandomValuesNoExpansion()
+    {
+        Random rand = new Random();
+        int lengthOfMap1 = 512;
+        int lengthOfMap2 = 1024;
+        HashMap<Integer, Float> intFloatMap1 = new HashMap<Integer, Float>(false);
+        for (int i = 0; i < lengthOfMap1; i++)
+        {
+            intFloatMap1.put(i, rand.nextFloat() + 1);
+        }
+
+        HashMap<Integer, Float> intFloatMap2 = new HashMap<Integer, Float>(false);
+        for (int i = lengthOfMap1; i < lengthOfMap2; i++)
+        {
+            intFloatMap2.put(i, rand.nextFloat() + 1);
+        }
+
+        intFloatMap1.putAll(intFloatMap2);
+        assertEquals(lengthOfMap2, intFloatMap1.size());
+
+        for (int i = lengthOfMap1; i < lengthOfMap2; i++)
+        {
+            assertEquals(intFloatMap1.get(i), intFloatMap2.get(i));
+        }
+    }
+
+    @Test
+    public void compareExecutionTime()
+    {
+        long startTime = System.currentTimeMillis();
+        putAllRandomValues();
+        long stopTime = System.currentTimeMillis();
+        long elapsedTime = stopTime - startTime;
+
+        long startTime2 = System.currentTimeMillis();
+        putAllRandomValuesNoExpansion();
+        long stopTime2 = System.currentTimeMillis();
+        long elapsedTime2 = stopTime2 - startTime2;
+
+        assertTrue(elapsedTime > elapsedTime2);
     }
 }
