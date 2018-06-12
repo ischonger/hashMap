@@ -3,6 +3,8 @@ package hashMap;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 @SuppressWarnings(
 {
@@ -281,24 +283,21 @@ public class HashMap<Key, V> implements Cloneable, Serializable
         return keySet;
     }
 
-    @SuppressWarnings(
+    public Collection<Object> values()
     {
-      "unchecked", "null"
-    })
-    public Collection<?> values()
-    {
-        Collection<V> values = null;
+        List<Object> values = new LinkedList<Object>();
         Node<?, ?> traverseNode = null;
         for (int i = 0; i < arrayMap.length; i++)
         {
             traverseNode = arrayMap[i];
             while (traverseNode != null)
             {
-                values.add((V) traverseNode.getValue());
+                Object value = traverseNode.getValue();
+                values.add(value);
                 traverseNode = traverseNode.getNext();
             }
         }
-        return values;
+        return (Collection<Object>) values;
     }
 
 }

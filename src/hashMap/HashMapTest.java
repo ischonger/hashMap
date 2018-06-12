@@ -442,7 +442,6 @@ public class HashMapTest
     @Test
     public void getKeySet()
     {
-        Random rand = new Random();
         int lengthOfMap = 12;
         HashMap<Integer, String> intFloatMap = new HashMap<Integer, String>();
         for (int i = 0; i < lengthOfMap; i++)
@@ -460,25 +459,29 @@ public class HashMapTest
     }
 
     @Test
-    @Ignore
     public void getValuesFromHashMap()
     {
-        HashMap<Adress, String> adIntMap = new HashMap<Adress, String>();
+        HashMap<Adress, String> adStringMap = new HashMap<Adress, String>();
 
         Adress adress1 = new Adress("Erfurt", "street1", "number1", "zip1");
         Adress adress2 = new Adress("Weimar", "street2", "number2", "zip2");
         Adress adress3 = new Adress("Jenahr", "street3", "number3", "zip3");
 
-        adIntMap.put(adress1, "dangerous");
-        adIntMap.put(adress2, "eligible");
-        adIntMap.put(adress3, "granted");
+        adStringMap.put(adress1, "dangerous");
+        adStringMap.put(adress2, "eligible");
+        adStringMap.put(adress3, "granted");
 
         String[] cityNames = new String[3];
         cityNames[0] = "dangerous";
         cityNames[1] = "eligible";
         cityNames[2] = "granted";
-        Collection mapValues = adIntMap.values();
+        Collection<Object> mapValues = adStringMap.values();
 
-        // TODO iterate & check
+        assertEquals(adStringMap.size(), mapValues.size());
+
+        for (Object value : mapValues)
+        {
+            assertTrue(adStringMap.containsValue((String) value));
+        }
     }
 }
