@@ -10,7 +10,6 @@ import java.util.List;
 {
   "serial", "hiding"
 })
-// TODO throw errors
 public class HashMap<Key, V> implements Cloneable, Serializable
 {
     private int DEFAULT_CAPACITY = 16;
@@ -26,8 +25,18 @@ public class HashMap<Key, V> implements Cloneable, Serializable
     {
     }
 
+    /*
+     * Constructs an empty HashMap with the specified initial capacity and load factor. With doExpansion = false a
+     * hashmap can be generated with a static number of buckets. So there won't be an expansion phase in put().
+     * 
+     * throws IllegalArgumentException - if the initial capacity is negative or the load factor is not in [0, 1]
+     */
     HashMap(int defaultCapacity, double loadFactor, boolean doExpansion)
     {
+        if ((loadFactor > 1.0 && loadFactor < 0.0) || defaultCapacity < 0)
+        {
+            throw new IllegalArgumentException();
+        }
         this.DEFAULT_CAPACITY = defaultCapacity;
         this.LOAD_FACTOR = loadFactor;
         this.DO_EXPANSION = doExpansion;
@@ -224,10 +233,17 @@ public class HashMap<Key, V> implements Cloneable, Serializable
      * Copies all of the mappings from the specified map to this map.
      * 
      * params HashMap<Key, V> map2
+     * 
+     * throws NullPointerException - if the specified map is null
      */
     @SuppressWarnings("unchecked")
     public void putAll(HashMap<Key, V> map2)
     {
+        if (map2.isEmpty())
+        {
+            throw new NullPointerException();
+        }
+
         for (int i = 0; i < map2.capacity(); i++)
         {
             Node<Key, V> node = map2.arrayMap[i];
