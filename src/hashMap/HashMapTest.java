@@ -179,58 +179,25 @@ public class HashMapTest
     }
 
     @Test
-    public void putAHashMap()
+    public void putAll16()
     {
-        HashMap<Integer, Float> intFloatMap1 = new HashMap<Integer, Float>();
-        for (int i = 0; i < 32; i++)
-        {
-            intFloatMap1.put(i, (float) i);
-        }
-
-        HashMap<Integer, Float> intFloatMap2 = new HashMap<Integer, Float>();
-        for (int i = 32; i < 64; i++)
-        {
-            intFloatMap2.put(i, (float) i);
-        }
-
-        intFloatMap1.putAll(intFloatMap2);
-        assertEquals(64, intFloatMap1.size());
-
-        for (int i = 32; i < intFloatMap1.size(); i++)
-        {
-            assertEquals(intFloatMap1.get(i), intFloatMap2.get(i));
-        }
+        putAllTest(8, 16);
     }
 
     @Test
-    public void putAllSmallTest()
+    public void putAll256()
     {
-        HashMap<Integer, Float> intFloatMap1 = new HashMap<Integer, Float>();
-        for (int i = 0; i < 8; i++)
-        {
-            intFloatMap1.put(i, (float) i);
-        }
-
-        HashMap<Integer, Float> intFloatMap2 = new HashMap<Integer, Float>();
-        for (int i = 8; i < 16; i++)
-        {
-            intFloatMap2.put(i, (float) i);
-        }
-
-        intFloatMap1.putAll(intFloatMap2);
-        assertEquals(16, intFloatMap1.size());
-
-        for (int i = 8; i < intFloatMap1.size() + 10; i++)
-        {
-            assertEquals(intFloatMap1.get(i), intFloatMap2.get(i));
-        }
+        putAllTest(128, 256);
     }
 
     @Test
-    public void putAllHugeTest()
+    public void putAll1024()
     {
-        int lengthOfMap1 = 512;
-        int lengthOfMap2 = 1024;
+        putAllTest(512, 1024);
+    }
+
+    public void putAllTest(int lengthOfMap1, int lengthOfMap2)
+    {
         HashMap<Integer, Float> intFloatMap1 = new HashMap<Integer, Float>();
         for (int i = 0; i < lengthOfMap1; i++)
         {
