@@ -69,8 +69,8 @@ public class HashMap<Key, V> implements Cloneable, Serializable
 
         if (numberOfEmptyBuckets <= (int) length * (1 - LOAD_FACTOR))
         {
-            Node[] newArrayMap = new Node[DEFAULT_CAPACITY * 2];
-            for (int i = 0; i < arrayMap.length; i++)
+            Node[] newArrayMap = new Node[length * 2];
+            for (int i = 0; i < length; i++)
             {
                 newArrayMap[i] = arrayMap[i];
             }
@@ -189,16 +189,9 @@ public class HashMap<Key, V> implements Cloneable, Serializable
         }
     }
 
-    @SuppressWarnings("unchecked")
     public HashMap<Key, V> clone()
     {
-        HashMap<Key, V> map2 = new HashMap<Key, V>();
-        for (int i = 0; i < map2.capacity(); i++)
-        {
-            Node<Key, V> node = arrayMap[i];
-            map2.put(node);
-        }
-        return map2;
+        return this;
     }
 
     @SuppressWarnings("unchecked")
@@ -245,7 +238,7 @@ public class HashMap<Key, V> implements Cloneable, Serializable
         for (int i = 0; i < arrayMap.length; i++)
         {
             traverseNode = arrayMap[i];
-            while (traverseNode.getNext() != null)
+            while (traverseNode != null)
             {
                 entrySet.add(traverseNode);
                 traverseNode = traverseNode.getNext();
