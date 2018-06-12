@@ -38,8 +38,8 @@ public class HashMapTest
         hashmap.put(firstNameKey, "John");
         hashmap.put(firstNameKey, "Doe");
 
-        assertEquals("John", hashmap.get(firstNameKey));
         assertNotEquals("Doe", hashmap.get(firstNameKey));
+        assertEquals("John", hashmap.get(firstNameKey));
     }
 
     @Test
@@ -82,9 +82,9 @@ public class HashMapTest
     public void put3HashMap()
     {
         HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
-        hashMap.put("dojaqojnweofjdweofnöriweonfösökodnöfraeo vnrenvirevrnvüorneövoneraövnaöregvnöaerjvn", 985876434);
+        hashMap.put("dojaqojnweofjdweofnör789iweonfösökodnöfraeo vnrenvirevrnvüorneövoneraövnaöregvnöaerjvn", 985876434);
         assertEquals(Integer.valueOf(985876434),
-                     hashMap.get("dojaqojnweofjdweofnöriweonfösökodnöfraeo vnrenvirevrnvüorneövoneraövnaöregvnöaerjvn"));
+                     hashMap.get("dojaqojnweofjdweofnör789iweonfösökodnöfraeo vnrenvirevrnvüorneövoneraövnaöregvnöaerjvn"));
     }
 
     @Test
