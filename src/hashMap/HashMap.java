@@ -10,13 +10,14 @@ import java.util.List;
 {
   "serial", "hiding"
 })
+// TODO throw errors
 public class HashMap<Key, V> implements Cloneable, Serializable
 {
     private int DEFAULT_CAPACITY = 16;
 
     private double LOAD_FACTOR = 0.75;
 
-    private boolean DO_EXPANSION = false;
+    private boolean DO_EXPANSION = true;
 
     @SuppressWarnings("rawtypes")
     private Node[] arrayMap = new Node[DEFAULT_CAPACITY];
@@ -32,12 +33,22 @@ public class HashMap<Key, V> implements Cloneable, Serializable
         this.DO_EXPANSION = doExpansion;
     }
 
+    HashMap(boolean doExpansion)
+    {
+        this.DO_EXPANSION = doExpansion;
+    }
+
     public void put(Key key, V value)
     {
         Node<Key, V> node = new Node<Key, V>(key, value);
         put(node);
     }
 
+    /*
+     * Associates the specified value with the specified key in this map.
+     * 
+     * params Node<Key, V> node
+     */
     @SuppressWarnings("unchecked")
     private void put(Node<Key, V> node)
     {
@@ -107,6 +118,11 @@ public class HashMap<Key, V> implements Cloneable, Serializable
         }
     }
 
+    /*
+     * Returns the value to which the specified key is mapped, or null if this map contains no mapping for the key.
+     * 
+     * params Key key returns V
+     */
     @SuppressWarnings("unchecked")
     public V get(Key key)
     {
@@ -128,6 +144,13 @@ public class HashMap<Key, V> implements Cloneable, Serializable
         return toBeReturned;
     }
 
+    /*
+     * Removes the mapping for the specified key from this map if present.
+     * 
+     * params Key key
+     * 
+     * returns V
+     */
     @SuppressWarnings("unchecked")
     public boolean remove(Key key)
     {
@@ -156,6 +179,9 @@ public class HashMap<Key, V> implements Cloneable, Serializable
         return isRemoved;
     }
 
+    /*
+     * Removes all of the mappings from this map.
+     */
     public void clear()
     {
         for (int i = 0; i < DEFAULT_CAPACITY; i++)
@@ -166,7 +192,7 @@ public class HashMap<Key, V> implements Cloneable, Serializable
     }
 
     /*
-     * returns the amount of used buckets
+     * Returns the amount of used buckets.
      */
     public int capacity()
     {
@@ -174,7 +200,9 @@ public class HashMap<Key, V> implements Cloneable, Serializable
     }
 
     /*
-     * returns the amount of nodes saved in the array
+     * Returns the number of key-value mappings in this map.
+     * 
+     * returns int
      */
     @SuppressWarnings("unchecked")
     public int size()
@@ -192,6 +220,11 @@ public class HashMap<Key, V> implements Cloneable, Serializable
         return size;
     }
 
+    /*
+     * Copies all of the mappings from the specified map to this map.
+     * 
+     * params HashMap<Key, V> map2
+     */
     @SuppressWarnings("unchecked")
     public void putAll(HashMap<Key, V> map2)
     {
@@ -205,11 +238,21 @@ public class HashMap<Key, V> implements Cloneable, Serializable
         }
     }
 
+    /*
+     * Returns a shallow copy of this HashMap instance: the keys and values themselves are not cloned.
+     * 
+     * @see java.lang.Object#clone()
+     */
     public HashMap<Key, V> clone()
     {
         return this;
     }
 
+    /*
+     * Returns true if this map contains a mapping for the specified key.
+     * 
+     * param Key key returns boolean
+     */
     @SuppressWarnings("unchecked")
     public boolean containsKey(Key key)
     {
@@ -228,6 +271,11 @@ public class HashMap<Key, V> implements Cloneable, Serializable
         return false;
     }
 
+    /*
+     * Returns true if this map maps one or more keys to the specified value.
+     * 
+     * param V value returns boolean
+     */
     @SuppressWarnings("unchecked")
     public boolean containsValue(V value)
     {
@@ -246,6 +294,11 @@ public class HashMap<Key, V> implements Cloneable, Serializable
         return false;
     }
 
+    /*
+     * Returns a Set view of the mappings contained in this map.
+     * 
+     * returns HashSet<Node>
+     */
     @SuppressWarnings("rawtypes")
     public HashSet<Node> entrySet()
     {
@@ -263,6 +316,11 @@ public class HashMap<Key, V> implements Cloneable, Serializable
         return entrySet;
     }
 
+    /*
+     * Returns true if this map contains no key-value mappings.
+     * 
+     * returns boolean
+     */
     public boolean isEmpty()
     {
         for (int i = 0; i < arrayMap.length; i++)
@@ -275,6 +333,11 @@ public class HashMap<Key, V> implements Cloneable, Serializable
         return true;
     }
 
+    /*
+     * Returns a Set view of the keys contained in this map.
+     * 
+     * returns HashSet<Key>
+     */
     @SuppressWarnings("unchecked")
     public HashSet<Key> keySet()
     {
@@ -292,6 +355,11 @@ public class HashMap<Key, V> implements Cloneable, Serializable
         return keySet;
     }
 
+    /*
+     * Returns a Collection view of the values contained in this map.
+     * 
+     * returns Collection<Object>
+     */
     public Collection<Object> values()
     {
         List<Object> values = new LinkedList<Object>();
