@@ -221,30 +221,6 @@ public class HashMapTest
         return intFloatMap1;
     }
 
-    private HashMap<Integer, Float> putAllTest(int lengthOfMap1, int lengthOfMap2, HashMap<Integer, Float> map)
-    {
-        for (int i = 0; i < lengthOfMap1; i++)
-        {
-            map.put(i, (float) i);
-        }
-
-        HashMap<Integer, Float> intFloatMap2 = new HashMap<Integer, Float>();
-        for (int i = lengthOfMap1; i < lengthOfMap2; i++)
-        {
-            intFloatMap2.put(i, (float) i);
-        }
-
-        map.putAll(intFloatMap2);
-        assertEquals(lengthOfMap2, map.size());
-
-        for (int i = lengthOfMap1; i < lengthOfMap2; i++)
-        {
-            assertEquals(map.get(i), intFloatMap2.get(i));
-        }
-
-        return map;
-    }
-
     @Test
     public void putAllRandomValues()
     {
@@ -327,6 +303,7 @@ public class HashMapTest
         assertFalse(intFloatMap.containsValue((float) 10000000.9));
     }
 
+    // TODO refactor all adress test functions
     @Test
     public void adressMap()
     {
@@ -520,4 +497,6 @@ public class HashMapTest
 
         assertTrue(elapsedTime > elapsedTime2);
     }
+
+    // TODO exception test cases
 }
