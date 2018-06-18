@@ -15,6 +15,9 @@ import org.junit.Test;
 
 public class HashMapTest
 {
+    /*
+     * key of Type Key, using two identical keys
+     */
     @Test
     public void putMapWithSameHash1()
     {
@@ -29,6 +32,9 @@ public class HashMapTest
         assertNotEquals("Doe", hashmap.get(lastNameKey));
     }
 
+    /*
+     * same test as before; twisted order of assert-tests
+     */
     @Test
     public void putMapWithSameHash2()
     {
@@ -42,6 +48,9 @@ public class HashMapTest
         assertEquals("John", hashmap.get(firstNameKey));
     }
 
+    /*
+     * testing for collision: both string-keys "AaAa" and "BBBB" have the same hash code 2031744
+     */
     @Test
     public void putMapWithSameHashString1()
     {
@@ -53,6 +62,9 @@ public class HashMapTest
         assertEquals("doe", hashmap.get("BBBB"));
     }
 
+    /*
+     * same test as putMapWithSameHashString1() twisted assertion order and false negative tests
+     */
     @Test
     public void putMapWithSameHashString2()
     {
@@ -66,20 +78,9 @@ public class HashMapTest
         assertNotEquals("doe", hashmap.get("AaAa"));
     }
 
-    @SuppressWarnings("rawtypes")
-    @Test
-    public void putTest()
-    {
-        HashMap<Key, String> hashmap = new HashMap<Key, String>();
-        Key<String> firstNameKey = new Key<String>("first name");
-        Key<String> lastNameKey = new Key<String>("last name");
-        hashmap.put(firstNameKey, "John");
-        hashmap.put(lastNameKey, "Doe");
-
-        assertEquals("John", hashmap.get(firstNameKey));
-        assertEquals("Doe", hashmap.get(lastNameKey));
-    }
-
+    /*
+     * testing put() with a long string
+     */
     @Test
     public void putTestLongString()
     {
@@ -89,6 +90,9 @@ public class HashMapTest
                      hashMap.get("dojaqojnweofjdweofnör789iweonfösökodnöfraeo vnrenvirevrnvüorneövoneraövnaöregvnöaerjvn"));
     }
 
+    /*
+     * testing put() for a integer-boolean map
+     */
     @Test
     public void putTestBool()
     {
@@ -98,6 +102,9 @@ public class HashMapTest
         assertEquals(actual, true);
     }
 
+    /*
+     * test remove()
+     */
     @Test
     public void removeTest()
     {
@@ -114,6 +121,9 @@ public class HashMapTest
         assertNull(intMap.get(2));
     }
 
+    /*
+     * remove an element from an empty map
+     */
     @Test
     public void removeFromEmptyMap()
     {
@@ -121,18 +131,10 @@ public class HashMapTest
         assertFalse(intMap.remove(7));
     }
 
-    @Test
-    public void removeFromMapInSecondLayer()
-    {
-        HashMap<Integer, String> intStringMap = new HashMap<Integer, String>();
-        for (int i = 0; i < 32; i++)
-        {
-            intStringMap.put(i, String.valueOf(i));
-        }
-        intStringMap.remove(1);
-        assertNull(intStringMap.get(1));
-    }
-
+    /*
+     * remove a node from any deeper layer second layer nodes can be reached via traversing from first layer nodes using
+     * node.getNext()
+     */
     @Test
     public void removeFromMapInDeeperLayer()
     {
@@ -148,6 +150,9 @@ public class HashMapTest
 
     }
 
+    /*
+     * testing clear()
+     */
     @Test
     public void clearMap()
     {
@@ -160,6 +165,9 @@ public class HashMapTest
         assertNull(stringDoubleMap.get("18"));
     }
 
+    /*
+     * testing size() size() returns the number of nodes (=entries) in the hashmap
+     */
     @Test
     public void sizeOfAMap()
     {
@@ -173,6 +181,9 @@ public class HashMapTest
         assertEquals(expectedSize, intFloatMap.size());
     }
 
+    /*
+     * check the size of an empty map
+     */
     @Test
     public void sizeOfEmptyMap()
     {
@@ -205,6 +216,12 @@ public class HashMapTest
         return intFloatMap1;
     }
 
+    /*
+     * test putAll() function with different ranges putAllTest() builds a hashmap from 0 to first delimiter value and a
+     * second hashmap from first delimiter + 1 to second delimiter. Then it adds the values from the second hashmap
+     * using putAll() to the first hashmap. Afterwards it checks whether the second half of the first hashmap equals
+     * with the secondly generated hashmap.
+     */
     @Test
     public void putAll16()
     {
@@ -229,6 +246,10 @@ public class HashMapTest
         putAllTest(2048, 4096);
     }
 
+    /*
+     * same test as putAllTest() but using random values with delimiters 512 and 1024. this function will be used below
+     * in compareExecutionTime()
+     */
     @Test
     public void putAllRandomValues()
     {
@@ -256,6 +277,9 @@ public class HashMapTest
         }
     }
 
+    /*
+     * test for putting an empty hashmap in another should throw NullPointerException
+     */
     @Test(expected = NullPointerException.class)
     public void nullPointerExceptionInPutAll()
     {
@@ -272,6 +296,10 @@ public class HashMapTest
         intFloatMap1.putAll(intFloatMap2);
     }
 
+    /*
+     * testing clone() for a <Integer, String> hashmap tests if x.equals(x.clone()) is true tests if x.getClass ==
+     * x.clone().getClass() is true
+     */
     @Test
     public void cloneAMap()
     {
@@ -288,6 +316,9 @@ public class HashMapTest
         assertEquals(copyMap.getClass(), intStringMap.getClass());
     }
 
+    /*
+     * testing clone() for an <Integer, Boolean> hashmap
+     */
     @Test
     public void cloneIntBoolMap()
     {
@@ -304,6 +335,9 @@ public class HashMapTest
         assertEquals(copyMap.getClass(), intBoolMap.getClass());
     }
 
+    /*
+     * testing if correct key will be found and if unsaved key will not be found
+     */
     @Test
     public void mapHasAKey()
     {
@@ -318,6 +352,9 @@ public class HashMapTest
         assertTrue(hashmap.containsKey(lastNameKey));
     }
 
+    /*
+     * testing if map contains correct values
+     */
     @Test
     public void mapHasAValue()
     {
@@ -333,6 +370,10 @@ public class HashMapTest
         assertFalse(intFloatMap.containsValue((float) 10000000.9));
     }
 
+    /*
+     * testing if complex objects can be used in hashmaps too using Adress as a complex structure (= self-built class)
+     * this test uses Adress as value
+     */
     @Test
     public void adressMap()
     {
@@ -351,6 +392,10 @@ public class HashMapTest
         assertEquals("Jenahr", intAdMap.get(3).getCity());
     }
 
+    /*
+     * testing if complex objects can be used in hashmaps too using Adress as a complex structure (= self-built class)
+     * this test uses Adress as key
+     */
     @Test
     public void adressAsAKey()
     {
@@ -369,6 +414,9 @@ public class HashMapTest
         assertEquals("granted", adIntMap.get(adress3));
     }
 
+    /*
+     * testing getEntry()
+     */
     @SuppressWarnings("rawtypes")
     @Test
     public void getEntrySet()
@@ -388,6 +436,9 @@ public class HashMapTest
         }
     }
 
+    /*
+     * prints the set of a hashmap using getEntry. using @Ignore this test will be ignored to avoid spamming output
+     */
     @SuppressWarnings("rawtypes")
     @Ignore
     @Test
@@ -411,6 +462,10 @@ public class HashMapTest
         System.out.println("}");
     }
 
+    /*
+     * testing isEmpty() for a hashmap which was filled and then cleared by using remove() function over all first layer
+     * nodes (= entries)
+     */
     @Test
     public void isMapEmptyUsingRemove()
     {
@@ -431,6 +486,9 @@ public class HashMapTest
         assertTrue(intAdMap.isEmpty());
     }
 
+    /*
+     * testing isEmpty() for a hashmap which was filled and then cleared by using clear() function
+     */
     @Test
     public void isMapEmptyUsingClear()
     {
@@ -448,6 +506,9 @@ public class HashMapTest
         assertTrue(intAdMap.isEmpty());
     }
 
+    /*
+     * testing isEmpty() for an empty hashmap
+     */
     @Test
     public void isNewMapEmpty()
     {
@@ -455,6 +516,9 @@ public class HashMapTest
         assertTrue(intAdMap.isEmpty());
     }
 
+    /*
+     * testing getKey()
+     */
     @Test
     public void getKeySet()
     {
@@ -474,6 +538,9 @@ public class HashMapTest
         }
     }
 
+    /*
+     * testing values()
+     */
     @Test
     public void getValuesFromMap()
     {
@@ -501,6 +568,9 @@ public class HashMapTest
         }
     }
 
+    /*
+     * does the same test as putAllRandomValues() but using a hashmap without expansion step in the put()-function
+     */
     @Test
     public void putAllRandomValuesNoExpansion()
     {
@@ -528,6 +598,10 @@ public class HashMapTest
         }
     }
 
+    /*
+     * compares the execution time of two hashmaps whilst first hashmaps in putAllRandomValues() are using the expansion
+     * step but not those in putAllRandomValuesNoExpansion()
+     */
     @Test
     public void compareExecutionTime()
     {
@@ -545,6 +619,9 @@ public class HashMapTest
         System.out.println(elapsedTimeWithExpansion + " > " + elapsedTimeNoExpansion);
     }
 
+    /*
+     * testing illegal arguments in hashmap constructor
+     */
     @Test(expected = IllegalArgumentException.class)
     public void illegalArgumentsInConstructor()
     {
