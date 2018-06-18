@@ -62,11 +62,13 @@ public class HashMapTest
 
         assertEquals("doe", hashmap.get("BBBB"));
         assertEquals("john", hashmap.get("AaAa"));
+        assertNotEquals("john", hashmap.get("BBBB"));
+        assertNotEquals("doe", hashmap.get("AaAa"));
     }
 
     @SuppressWarnings("rawtypes")
     @Test
-    public void putHashMap()
+    public void putTest()
     {
         HashMap<Key, String> hashmap = new HashMap<Key, String>();
         Key<String> firstNameKey = new Key<String>("first name");
@@ -79,7 +81,7 @@ public class HashMapTest
     }
 
     @Test
-    public void put3HashMap()
+    public void putTestLongString()
     {
         HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
         hashMap.put("dojaqojnweofjdweofnör789iweonfösökodnöfraeo vnrenvirevrnvüorneövoneraövnaöregvnöaerjvn", 985876434);
@@ -88,7 +90,7 @@ public class HashMapTest
     }
 
     @Test
-    public void putABoolMap()
+    public void putTestBool()
     {
         HashMap<Integer, Boolean> boolMap = new HashMap<Integer, Boolean>();
         boolMap.put(3, true);
@@ -97,7 +99,7 @@ public class HashMapTest
     }
 
     @Test
-    public void removeHashMap()
+    public void removeTest()
     {
         HashMap<Integer, String> intMap = new HashMap<Integer, String>();
         intMap.put(1, "first");
@@ -113,14 +115,14 @@ public class HashMapTest
     }
 
     @Test
-    public void removeFromEmptyHashmap()
+    public void removeFromEmptyMap()
     {
         HashMap<Integer, String> intMap = new HashMap<Integer, String>();
         assertFalse(intMap.remove(7));
     }
 
     @Test
-    public void removeHashMapInSecondLayer()
+    public void removeFromMapInSecondLayer()
     {
         HashMap<Integer, String> intStringMap = new HashMap<Integer, String>();
         for (int i = 0; i < 32; i++)
@@ -132,7 +134,7 @@ public class HashMapTest
     }
 
     @Test
-    public void removeHashMapInDeeperLayer()
+    public void removeFromMapInDeeperLayer()
     {
         HashMap<Integer, String> intStringMap = new HashMap<Integer, String>();
         for (int i = 0; i < 64; i++)
@@ -147,7 +149,7 @@ public class HashMapTest
     }
 
     @Test
-    public void clearHashMap()
+    public void clearMap()
     {
         HashMap<String, Double> stringDoubleMap = new HashMap<String, Double>();
         for (int i = 0; i < 64; i++)
@@ -172,28 +174,10 @@ public class HashMapTest
     }
 
     @Test
-    public void sizeOfEmptyHashMap()
+    public void sizeOfEmptyMap()
     {
         HashMap<String, Integer> map = new HashMap<String, Integer>();
         assertEquals(0, map.size());
-    }
-
-    @Test
-    public void putAll16()
-    {
-        putAllTest(8, 16);
-    }
-
-    @Test
-    public void putAll256()
-    {
-        putAllTest(128, 256);
-    }
-
-    @Test
-    public void putAll1024()
-    {
-        putAllTest(512, 1024);
     }
 
     private HashMap<Integer, Float> putAllTest(int lengthOfMap1, int lengthOfMap2)
@@ -219,6 +203,30 @@ public class HashMapTest
         }
 
         return intFloatMap1;
+    }
+
+    @Test
+    public void putAll16()
+    {
+        putAllTest(8, 16);
+    }
+
+    @Test
+    public void putAll256()
+    {
+        putAllTest(128, 256);
+    }
+
+    @Test
+    public void putAll1024()
+    {
+        putAllTest(512, 1024);
+    }
+
+    @Test
+    public void putAll2048()
+    {
+        putAllTest(2048, 4096);
     }
 
     @Test
@@ -248,8 +256,24 @@ public class HashMapTest
         }
     }
 
+    @Test(expected = NullPointerException.class)
+    public void nullPointerExceptionInPutAll()
+    {
+        Random rand = new Random();
+        int lengthOfMap1 = 512;
+        HashMap<Integer, Float> intFloatMap1 = new HashMap<Integer, Float>();
+        for (int i = 0; i < lengthOfMap1; i++)
+        {
+            intFloatMap1.put(i, rand.nextFloat() + 1);
+        }
+
+        HashMap<Integer, Float> intFloatMap2 = new HashMap<Integer, Float>();
+
+        intFloatMap1.putAll(intFloatMap2);
+    }
+
     @Test
-    public void cloneAHashMap()
+    public void cloneAMap()
     {
         HashMap<Integer, String> intStringMap = new HashMap<Integer, String>();
         for (int i = 0; i < 64; i++)
@@ -259,6 +283,9 @@ public class HashMapTest
         HashMap<Integer, String> copyMap = intStringMap.clone();
         assertEquals("1", copyMap.get(1));
         assertEquals("2", copyMap.get(2));
+
+        assertEquals(copyMap, intStringMap);
+        assertEquals(copyMap.getClass(), intStringMap.getClass());
     }
 
     @Test
@@ -272,6 +299,9 @@ public class HashMapTest
         HashMap<Integer, Boolean> copyMap = intBoolMap.clone();
         assertEquals(true, copyMap.get(2));
         assertEquals(false, copyMap.get(3));
+
+        assertEquals(copyMap, intBoolMap);
+        assertEquals(copyMap.getClass(), intBoolMap.getClass());
     }
 
     @Test
@@ -322,7 +352,7 @@ public class HashMapTest
     }
 
     @Test
-    public void adressAsKey()
+    public void adressAsAKey()
     {
         HashMap<Adress, String> adIntMap = new HashMap<Adress, String>();
 
@@ -382,7 +412,7 @@ public class HashMapTest
     }
 
     @Test
-    public void isHashmapEmpty()
+    public void isMapEmptyUsingRemove()
     {
         HashMap<Integer, Adress> intAdMap = new HashMap<Integer, Adress>();
         Random rand = new Random();
@@ -402,7 +432,24 @@ public class HashMapTest
     }
 
     @Test
-    public void isNewHashmapEmpty()
+    public void isMapEmptyUsingClear()
+    {
+        HashMap<Integer, Adress> intAdMap = new HashMap<Integer, Adress>();
+        Random rand = new Random();
+
+        for (int i = 1; i <= 100; i++)
+        {
+            intAdMap.put(i,
+                         new Adress(Integer.toString(rand.nextInt(100)), Integer.toString(rand.nextInt(100)), Integer.toString(rand.nextInt(100)), Integer.toString(rand.nextInt(100))));
+        }
+
+        intAdMap.clear();
+
+        assertTrue(intAdMap.isEmpty());
+    }
+
+    @Test
+    public void isNewMapEmpty()
     {
         HashMap<Integer, Adress> intAdMap = new HashMap<Integer, Adress>();
         assertTrue(intAdMap.isEmpty());
@@ -428,7 +475,7 @@ public class HashMapTest
     }
 
     @Test
-    public void getValuesFromHashMap()
+    public void getValuesFromMap()
     {
         HashMap<Adress, String> adStringMap = new HashMap<Adress, String>();
 
@@ -487,14 +534,15 @@ public class HashMapTest
         long startTime = System.currentTimeMillis();
         putAllRandomValues();
         long stopTime = System.currentTimeMillis();
-        long elapsedTime = stopTime - startTime;
+        long elapsedTimeWithExpansion = stopTime - startTime;
 
         long startTime2 = System.currentTimeMillis();
         putAllRandomValuesNoExpansion();
         long stopTime2 = System.currentTimeMillis();
-        long elapsedTime2 = stopTime2 - startTime2;
+        long elapsedTimeNoExpansion = stopTime2 - startTime2;
 
-        assertTrue(elapsedTime > elapsedTime2);
+        assertTrue(elapsedTimeWithExpansion > elapsedTimeNoExpansion);
+        System.out.println(elapsedTimeWithExpansion + " > " + elapsedTimeNoExpansion);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -502,21 +550,5 @@ public class HashMapTest
     {
         @SuppressWarnings("unused")
         HashMap<Double, Double> doubleMap = new HashMap<Double, Double>(-5, 0, true);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void nullPointerExceptionInPutAll()
-    {
-        Random rand = new Random();
-        int lengthOfMap1 = 512;
-        HashMap<Integer, Float> intFloatMap1 = new HashMap<Integer, Float>();
-        for (int i = 0; i < lengthOfMap1; i++)
-        {
-            intFloatMap1.put(i, rand.nextFloat() + 1);
-        }
-
-        HashMap<Integer, Float> intFloatMap2 = new HashMap<Integer, Float>();
-
-        intFloatMap1.putAll(intFloatMap2);
     }
 }

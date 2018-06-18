@@ -37,6 +37,7 @@ public class HashMap<Key, V> implements Cloneable, Serializable
         {
             throw new IllegalArgumentException();
         }
+
         this.DEFAULT_CAPACITY = defaultCapacity;
         this.LOAD_FACTOR = loadFactor;
         this.DO_EXPANSION = doExpansion;
@@ -53,6 +54,7 @@ public class HashMap<Key, V> implements Cloneable, Serializable
         {
             throw new IllegalArgumentException();
         }
+
         this.DEFAULT_CAPACITY = defaultCapacity;
         this.LOAD_FACTOR = loadFactor;
     }
@@ -90,7 +92,7 @@ public class HashMap<Key, V> implements Cloneable, Serializable
             }
             else
             {
-                Node<?, ?> lastNode = getLastAdjascentNode(arrayMap[index]);
+                Node<Key, ?> lastNode = getLastAdjascentNode(arrayMap[index]);
                 lastNode.setNext(node);
             }
         }
@@ -145,7 +147,9 @@ public class HashMap<Key, V> implements Cloneable, Serializable
     /*
      * Returns the value to which the specified key is mapped, or null if this map contains no mapping for the key.
      * 
-     * params Key key returns V
+     * params Key key
+     * 
+     * returns V
      */
     @SuppressWarnings("unchecked")
     public V get(Key key)
@@ -208,7 +212,7 @@ public class HashMap<Key, V> implements Cloneable, Serializable
      */
     public void clear()
     {
-        for (int i = 0; i < DEFAULT_CAPACITY; i++)
+        for (int i = 0; i < this.arrayMap.length; i++)
         {
             arrayMap[i] = null;
         }
@@ -270,7 +274,7 @@ public class HashMap<Key, V> implements Cloneable, Serializable
     }
 
     /*
-     * Returns a shallow copy of this HashMap instance: the keys and values themselves are not cloned.
+     * Returns a shallow copy of this HashMap instance.
      * 
      * @see java.lang.Object#clone()
      */
