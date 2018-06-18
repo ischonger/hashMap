@@ -616,7 +616,6 @@ public class HashMapTest
         long elapsedTimeNoExpansion = stopTime2 - startTime2;
 
         assertTrue(elapsedTimeWithExpansion > elapsedTimeNoExpansion);
-        System.out.println(elapsedTimeWithExpansion + " > " + elapsedTimeNoExpansion);
     }
 
     /*
